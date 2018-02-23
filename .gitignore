@@ -6,4 +6,4 @@
 ./Model/__*
 ./*.ipynb
 ./*.sh
-
+*.pyc
