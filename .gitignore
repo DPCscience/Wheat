@@ -8,3 +8,8 @@
 ./*.sh
 *.pyc
 *.log
+.DS_Store
+.DS_Store?
+._*
+*~
+*#
