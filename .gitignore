@@ -1,0 +1,9 @@
+./Data/*
+.env/*
+.ipynb_checkpoints/*
+./Model/vgg_16.model_dict
+./Experiments/*
+./Model/__*
+./*.ipynb
+./*.sh
+
