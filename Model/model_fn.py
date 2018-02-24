@@ -18,6 +18,10 @@ def create_block(
             padding=padding, kernel_initializer=kernel_initializer,
             trainable=trainable, bias_initializer=bias_initializer
         )
+	if params.use_dropout:
+		out = tf.layers.dropout(
+			inputs=out, rate=(1-params.keep_prob), training=is_training
+  		)
         if params.use_batch_norm:
             out = tf.layers.batch_normalization(
                 out, momentum=params.bn_momentum,
