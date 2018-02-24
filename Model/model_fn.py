@@ -62,6 +62,10 @@ def build_model(is_training, inputs, params):
 
     with tf.variable_scope('fc1'):
         out = tf.layers.dense(out, num_filters*4)
+        if params.use_dropout:
+            out = tf.layers.dropout(
+                inputs=out, rate=(1-params.keep_prob), training=is_training
+            )
         if params.use_batch_norm:
             out = tf.layers.batch_normalization(
                 out, momentum=params.bn_momentum, training=is_training

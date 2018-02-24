@@ -5,6 +5,7 @@
 
     "num_channels": 64,
     "use_batch_norm": false,
+    "use_dropout": false,
 
     "image_size": 256,
     "use_random_flip": true,

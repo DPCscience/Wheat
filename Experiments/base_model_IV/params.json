@@ -2,10 +2,12 @@
     "learning_rate": 1e-3,
     "batch_size": 32,
     "num_epochs": 20,
-
     "num_channels": 64,
+
     "use_batch_norm": true,
     "bn_momentum": 0.9,
+
+    "use_dropout": false,
 
     "image_size": 256,
     "use_random_flip": true,
