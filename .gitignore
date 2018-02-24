@@ -12,3 +12,5 @@ Model/__*
 ._*
 *~
 *#
+*_weights
+*.tfevents.*
