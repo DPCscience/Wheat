@@ -15,3 +15,5 @@ Model/__*
 *_weights
 *.tfevents.*
 *.pem
+stats/*
+img/*

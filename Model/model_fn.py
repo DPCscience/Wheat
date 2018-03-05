@@ -8,15 +8,17 @@ def create_block(
     block_name, inputs, num_filters, params,
     kernel_size=3, padding='same', is_training=True,
     kernel_initializer=None, trainable=True, pool=True,
-    bias_initializer=tf.zeros_initializer()):
+    bias_initializer=tf.zeros_initializer(), use_l2=False):
     """
     Creates a single convolution block.
     """
+    regularizer = tf.contrib.layers.l2_regularizer(params.lambdah) if use_l2 else None
     with tf.variable_scope(block_name):
         out = tf.layers.conv2d(
             inputs, num_filters, kernel_size,
             padding=padding, kernel_initializer=kernel_initializer,
-            trainable=trainable, bias_initializer=bias_initializer
+            trainable=trainable, bias_initializer=bias_initializer,
+            kernel_regularizer=regularizer
         )
         if params.use_dropout:
             out = tf.layers.dropout(
@@ -52,11 +54,14 @@ def build_model(is_training, inputs, params):
         trainable=False, kernel_initializer=fixed_kernel_initializer(0),
         bias_initializer=fixed_bias_initializer(0)
     )
+    add_l2 = params.use_l2 # Should we use L2 Regularization
     out = create_block(
         'conv_block_2', out, num_filters*2, params,
+        use_l2=add_l2
     )
     out = create_block(
-        'conv_block_3', out, num_filters*4, params
+        'conv_block_3', out, num_filters*4, params,
+        use_l2=add_l2
     )
     # out = create_block(
     #     'conv_block_4', out, num_filters*2, params,
@@ -64,20 +69,33 @@ def build_model(is_training, inputs, params):
     assert out.get_shape().as_list() == [None, 32, 32, num_filters * 4]
     out = tf.reshape(out, [-1, 32 * 32 * num_filters * 4])
 
+    # L_2 Regularization For the fully connected Layers.
+    if add_l2:
+        regularizer = tf.contrib.layers.l2_regularizer(params.lambdah)
+    else:
+        regularizer = None
     with tf.variable_scope('fc1'):
-        out = tf.layers.dense(out, num_filters*4)
+        out = tf.layers.dense(
+            out, num_filters*4,
+            kernel_regularizer=regularizer
+        )
         if params.use_dropout:
             out = tf.layers.dropout(
-                inputs=out, rate=(1-params.keep_prob), training=is_training
+                inputs=out, rate=(1-params.keep_prob),
+                training=is_training
             )
         if params.use_batch_norm:
             out = tf.layers.batch_normalization(
-                out, momentum=params.bn_momentum, training=is_training
+                out, momentum=params.bn_momentum,
+                training=is_training
             )
         out = tf.nn.relu(out)
 
     with tf.variable_scope('fc_2'):
-        logits = tf.layers.dense(out, params.num_labels)
+        logits = tf.layers.dense(
+            out, params.num_labels,
+            kernel_regularizer=regularizer
+        )
     return logits
 
 
