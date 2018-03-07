@@ -54,7 +54,7 @@ def build_model(is_training, inputs, params):
         trainable=False, kernel_initializer=fixed_kernel_initializer(0),
         bias_initializer=fixed_bias_initializer(0)
     )
-    add_l2 = params.use_lr_decay # Should we use L2 Regularization
+    add_l2 = params.use_l2 # Should we use L2 Regularization
     out = create_block(
         'conv_block_2', out, num_filters*2, params,
         use_l2=add_l2
