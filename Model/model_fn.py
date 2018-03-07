@@ -132,8 +132,12 @@ def model_fn(mode, inputs, params, reuse=False):
 
     # Define training step that minimizes the loss with the Adam optimizer
     if is_training:
-        optimizer = tf.train.AdamOptimizer(params.learning_rate)
         global_step = tf.train.get_or_create_global_step()
+        lr = tf.train.exponential_decay(
+            params.learning_rate, global_step, params.decay_steps,
+            params.decay_rate 
+        ) if params.use_lr_decay else params.learning_rate
+        optimizer = tf.train.AdamOptimizer(lr)
         if params.use_batch_norm:
             # Add a dependency to update the moving mean and variance for batch normalization
             with tf.control_dependencies(tf.get_collection(tf.GraphKeys.UPDATE_OPS)):
