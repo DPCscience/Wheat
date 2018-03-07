@@ -54,7 +54,7 @@ def build_model(is_training, inputs, params):
         trainable=False, kernel_initializer=fixed_kernel_initializer(0),
         bias_initializer=fixed_bias_initializer(0)
     )
-    add_l2 = params.use_l2 # Should we use L2 Regularization
+    add_l2 = params.use_lr_decay # Should we use L2 Regularization
     out = create_block(
         'conv_block_2', out, num_filters*2, params,
         use_l2=add_l2
@@ -135,7 +135,7 @@ def model_fn(mode, inputs, params, reuse=False):
         global_step = tf.train.get_or_create_global_step()
         lr = tf.train.exponential_decay(
             params.learning_rate, global_step, params.decay_steps,
-            params.decay_rate 
+            params.decay_rate
         ) if params.use_lr_decay else params.learning_rate
         optimizer = tf.train.AdamOptimizer(lr)
         if params.use_batch_norm:
