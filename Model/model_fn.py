@@ -50,22 +50,23 @@ def build_model(is_training, inputs, params):
 
     num_filters = params.num_channels # Number of filters in the first conv block
     out = create_block(
-        'conv_block_1', images, num_filters, params,
+        'conv_block_1', images, num_filters, params, pool=False,
         trainable=False, kernel_initializer=fixed_kernel_initializer(0),
         bias_initializer=fixed_bias_initializer(0)
     )
     add_l2 = params.use_l2 # Should we use L2 Regularization
     out = create_block(
-        'conv_block_2', out, num_filters*2, params,
+        'conv_block_2', out, num_filters, params,
+        trainable=False, kernel_initializer=fixed_bias_initializer(2),
+        bias_initializer=fixed_bias_initializer(2)
+    )
+    out = create_block(
+        'conv_block_3', out, num_filters*2, params,
         use_l2=add_l2
     )
     out = create_block(
-        'conv_block_3', out, num_filters*4, params,
-        use_l2=add_l2
+        'conv_block_4', out, num_filters*4, params,
     )
-    # out = create_block(
-    #     'conv_block_4', out, num_filters*2, params,
-    # )
     assert out.get_shape().as_list() == [None, 32, 32, num_filters * 4]
     out = tf.reshape(out, [-1, 32 * 32 * num_filters * 4])
 
