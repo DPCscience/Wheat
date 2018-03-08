@@ -33,9 +33,9 @@ def train_preprocess(image, label, use_random_flip):
     """
     if use_random_flip:
         image = tf.image.random_flip_left_right(image)
-    # image = tf.image.random_brightness(image, max_delta=32.0 / 255.0)
-    # image = tf.image.random_saturation(image, lower=0.5, upper=1.5)
-    image = tf.image.per_image_standardization(image)
+    image = tf.image.random_brightness(image, max_delta=32.0 / 255.0)
+    image = tf.image.random_saturation(image, lower=0.5, upper=1.5)
+    #image = tf.image.per_image_standardization(image)
 
     image = tf.clip_by_value(image, 0.0, 1.0)
     return image, label
