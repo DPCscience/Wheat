@@ -1,0 +1,25 @@
+{
+    "learning_rate": 1e-3,
+    "batch_size": 32,
+    "num_epochs": 10,
+    "num_channels": 64,
+
+    "use_batch_norm": true,
+    "bn_momentum": 0.9,
+
+    "use_dropout": true,
+    "keep_prob": 0.9,
+
+    "use_lr_decay": false,
+    "decay_steps": 100,
+    "decay_rate": 0.9,
+
+    "use_l2":false,
+
+    "image_size": 256,
+    "use_random_flip": true,
+    "num_labels": 2,
+
+    "num_parallel_calls": 4,
+    "save_summary_steps": 1
+}
