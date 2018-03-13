@@ -17,6 +17,14 @@ parser.add_argument(
     '--data_dir', default='./Data/WHEAT/Binary/',
     help="The Data directory."
 )
+parser.add_argument(
+    '--param_to_tune', default='lr',
+    help="The parameter to tune, example: --param_to_tune=lr"
+)
+parser.add_argument(
+    '--lr_num_times', default=4,
+    help="Number of times to sample the learning rate."
+)
 
 def launch_training_job(parent_dir, data_dir, job_name, params):
     """Launch training of the model with a set of hyperparameters
@@ -48,14 +56,13 @@ if __name__ == "__main__":
     json_path = os.path.join(args.parent_dir, 'params.json')
     assert os.path.isfile(json_path), "No config file found at {}".format(json_path)
     params = Params(json_path)
+    lr_num_times = int(args.lr_num_times)
 
     # Perform hypersearch over one parameter
-    learning_rates = [1e-4, 1e-3, 1e-2]
+    # random search over [10**-4 to 10**0]
+    learning_rates = [10**(-4*np.random.rand()) for i in xrange(lr_num_times)]
 
     for learning_rate in learning_rates:
-        # Modify the relevant parameter in params
         params.learning_rate = learning_rate
-
-        # Launch job (name has to be unique)
         job_name = "learning_rate_{}".format(learning_rate)
         launch_training_job(args.parent_dir, args.data_dir, job_name, params)
