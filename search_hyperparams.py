@@ -4,6 +4,7 @@ import argparse
 import os
 from subprocess import check_call
 import sys
+import numpy as np
 
 from Model.utils import Params
 
@@ -60,7 +61,7 @@ if __name__ == "__main__":
 
     # Perform hypersearch over one parameter
     # random search over [10**-4 to 10**0]
-    learning_rates = [10**(-4*np.random.rand()) for i in xrange(lr_num_times)]
+    learning_rates = [10**(-4*np.random.rand()) for i in range(lr_num_times)]
 
     for learning_rate in learning_rates:
         params.learning_rate = learning_rate
