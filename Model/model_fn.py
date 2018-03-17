@@ -20,7 +20,7 @@ def create_block(
             trainable=trainable, bias_initializer=bias_initializer,
             kernel_regularizer=regularizer
         )
-        if params.use_dropout:
+        if params.use_dropout and trainable:
             out = tf.layers.dropout(
                 inputs=out, rate=(1-params.keep_prob), training=is_training
             )
@@ -57,7 +57,7 @@ def build_model(is_training, inputs, params):
     add_l2 = params.use_l2 # Should we use L2 Regularization
     out = create_block(
         'conv_block_2', out, num_filters*2, params,
-	use_l2=add_l2 
+	     use_l2=add_l2
     )
     out = create_block(
         'conv_block_3', out, num_filters*4, params,
@@ -153,7 +153,15 @@ def model_fn(mode, inputs, params, reuse=False):
     with tf.variable_scope("metrics"):
         metrics = {
             'accuracy': tf.metrics.accuracy(labels=labels, predictions=tf.argmax(logits, 1)),
-            'loss': tf.metrics.mean(loss)
+            'loss': tf.metrics.mean(loss),
+            # 'F-1 score': (
+            #             (2* tf.metrics.precision(labels=labels, predictions=tf.argmax(logits, 1)) *
+            #                 tf.metrics.recall(labels=labels, predictions=tf.argmax(logits, 1))
+            #             ) / (
+            #                 tf.metrics.precision(labels=labels, predictions=tf.argmax(logits, 1)) +
+            #                 tf.metrics.recall(labels=labels, predictions=tf.argmax(logits, 1))
+            #             )
+            # )
         }
 
     # Group the update ops for the tf.metrics

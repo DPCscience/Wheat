@@ -1,6 +1,6 @@
 {
-    "learning_rate": 1e-2,
-    "batch_size": 64,
+    "learning_rate": 1e-3,
+    "batch_size": 32,
     "num_epochs": 20,
     "num_channels": 64,
 
@@ -10,12 +10,12 @@
     "use_dropout": true,
     "keep_prob": 0.9,
 
-    "use_lr_decay": true,
+    "use_lr_decay": false,
     "decay_steps": 100,
     "decay_rate": 0.9,
 
     "use_l2":true,
-    "lambdah":0.05,
+    "lambdah":0.005,
 
     "image_size": 256,
     "use_random_flip": true,
