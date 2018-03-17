@@ -56,19 +56,19 @@ def build_model(is_training, inputs, params):
     )
     add_l2 = params.use_l2 # Should we use L2 Regularization
     out = create_block(
-        'conv_block_2', out, num_filters*2, params,
+        'conv_block_2', out, num_filters, params,
 	     use_l2=add_l2
     )
     out = create_block(
-        'conv_block_3', out, num_filters*4, params,
+        'conv_block_3', out, num_filters, params,
         use_l2=add_l2
     )
     # out = create_block(
     #     'conv_block_4', out, num_filters*8, params,
     # 	use_l2=add_l2
     # )
-    assert out.get_shape().as_list() == [None, 32, 32, num_filters * 4]
-    out = tf.reshape(out, [-1, 32 * 32 * num_filters * 4])
+    assert out.get_shape().as_list() == [None, 32, 32, num_filters]
+    out = tf.reshape(out, [-1, 32 * 32 * num_filters])
 
     # L_2 Regularization For the fully connected Layers.
     if add_l2:
