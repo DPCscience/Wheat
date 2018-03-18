@@ -95,3 +95,8 @@ def fixed_bias_initializer(layer_num):
     layer_name = 'features.'+str(layer_num)+'.bias'
     b = torch.load("Model/vgg_16.model_dict")[layer_name].numpy()
     return tf.constant_initializer(b)
+
+def get_confusion_matrx(labels, predictions):
+    return tf.confusion_matrix(
+        labels, predictions,
+    )

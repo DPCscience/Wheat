@@ -2,11 +2,13 @@
 
 import logging
 import os
+import numpy as np
 
 from tqdm import trange
 import tensorflow as tf
 
 from Model.utils import save_dict_to_json
+from Model.utils import get_confusion_matrx
 from Model.evaluation import evaluate_sess
 
 def train_sess(sess, model_spec, num_steps, writer, params):
@@ -115,6 +117,14 @@ def train_and_evaluate(
                 # Save best eval metrics in a json file in the model directory
                 best_json_path = os.path.join(model_dir, "metrics_eval_best_weights.json")
                 save_dict_to_json(metrics, best_json_path)
+
+            #Save Confusion matrix at the end of traininig.
+            if epoch + 1 == params.num_epochs:
+                confusion_matrix = get_confusion_matrx(
+                    eval_model_spec['labels'], eval_model_spec['predictions']
+                )
+                confusion_path = os.path.join(model_dir, "confusion_matrix.npy")
+                np.save(confusion_path, confusion_matrix)
 
             # Save latest eval metrics in a json file in the model directory
             last_json_path = os.path.join(model_dir, "metrics_eval_last_weights.json")

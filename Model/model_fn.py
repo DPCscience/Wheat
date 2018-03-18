@@ -203,5 +203,7 @@ def model_fn(mode, inputs, params, reuse=False):
 
     if is_training:
         model_spec['train_op'] = train_op
+    if not is_training:
+        model_spec['labels'] = labels
 
     return model_spec
