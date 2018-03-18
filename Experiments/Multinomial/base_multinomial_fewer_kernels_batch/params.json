@@ -1,6 +1,6 @@
 {
     "learning_rate": 1e-4,
-    "batch_size": 2048,
+    "batch_size": 512,
     "num_epochs": 15,
     "num_channels": 64,
 
