@@ -157,6 +157,10 @@ def model_fn(mode, inputs, params, reuse=False):
             'loss': tf.metrics.mean(loss),
             'precision': tf.metrics.precision(labels=labels, predictions=tf.argmax(logits, 1)),
             'recall': tf.metrics.recall(labels=labels, predictions=tf.argmax(logits, 1))
+            'per_class_acc': tf.metrics.mean_per_class_accuracy(
+                labels=labels, predictions=predictions=tf.argmax(logits, 1),
+                num_classes=params.num_labels
+            )
         }
 
     # Group the update ops for the tf.metrics
