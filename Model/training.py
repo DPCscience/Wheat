@@ -124,7 +124,9 @@ def train_and_evaluate(
                 )
                 try: # Issue w/ pickle.
                     confusion_path = os.path.join(model_dir, "confusion_matrix.npy")
-                    np.save(confusion_path, confusion_matrix)
+                    np.save(confusion_path, tf.Tensor.eval(
+                        confusion_matrix, feed_dict=None, session=None
+                    ))
                 except:
                     print(confusion_matrix)
 
