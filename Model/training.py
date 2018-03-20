@@ -75,7 +75,7 @@ def train_and_evaluate(
                       containing weights to restore the graph
     """
     # Initialize tf.Saver instances to save weights during training
-    last_saver = tf.train.Saver() # will keep last 5 epochs
+    last_saver = tf.train.Saver(max_to_keep=1) # will keep last 5 epochs
     best_saver = tf.train.Saver(max_to_keep=1)  # only keep 1 best checkpoint (best on eval)
     begin_at_epoch = 0
 
@@ -118,13 +118,15 @@ def train_and_evaluate(
                 best_json_path = os.path.join(model_dir, "metrics_eval_best_weights.json")
                 save_dict_to_json(metrics, best_json_path)
 
-            #Save Confusion matrix at the end of traininig.
-            if epoch + 1 == params.num_epochs:
+            #Save Confusion matrix for the best model
                 confusion_matrix = get_confusion_matrx(
                     eval_model_spec['labels'], eval_model_spec['predictions']
                 )
-                confusion_path = os.path.join(model_dir, "confusion_matrix.npy")
-                np.save(confusion_path, confusion_matrix)
+                try: # Issue w/ pickle.
+                    confusion_path = os.path.join(model_dir, "confusion_matrix.npy")
+                    np.save(confusion_path, confusion_matrix)
+                except:
+                    print(confusion_matrix)
 
             # Save latest eval metrics in a json file in the model directory
             last_json_path = os.path.join(model_dir, "metrics_eval_last_weights.json")
