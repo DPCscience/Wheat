@@ -118,18 +118,6 @@ def train_and_evaluate(
                 best_json_path = os.path.join(model_dir, "metrics_eval_best_weights.json")
                 save_dict_to_json(metrics, best_json_path)
 
-            #Save Confusion matrix for the best model
-                confusion_matrix = get_confusion_matrx(
-                    eval_model_spec['labels'], eval_model_spec['predictions']
-                )
-                try: # Issue w/ pickle.
-                    confusion_path = os.path.join(model_dir, "confusion_matrix.npy")
-                    np.save(confusion_path, confusion_matrix)
-                except:
-                    print(tf.Tensor.eval(
-                        confusion_matrix, feed_dict=None, session=None
-                    ))
-
             # Save latest eval metrics in a json file in the model directory
             last_json_path = os.path.join(model_dir, "metrics_eval_last_weights.json")
             save_dict_to_json(metrics, last_json_path)

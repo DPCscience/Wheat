@@ -155,14 +155,8 @@ def model_fn(mode, inputs, params, reuse=False):
         metrics = {
             'accuracy': tf.metrics.accuracy(labels=labels, predictions=tf.argmax(logits, 1)),
             'loss': tf.metrics.mean(loss),
-            # 'F-1 score': (
-            #             (2* tf.metrics.precision(labels=labels, predictions=tf.argmax(logits, 1)) *
-            #                 tf.metrics.recall(labels=labels, predictions=tf.argmax(logits, 1))
-            #             ) / (
-            #                 tf.metrics.precision(labels=labels, predictions=tf.argmax(logits, 1)) +
-            #                 tf.metrics.recall(labels=labels, predictions=tf.argmax(logits, 1))
-            #             )
-            # )
+            'precision': tf.metrics.precision(labels=labels, predictions=tf.argmax(logits, 1)),
+            'recall': tf.metrics.recall(labels=labels, predictions=tf.argmax(logits, 1))
         }
 
     # Group the update ops for the tf.metrics
