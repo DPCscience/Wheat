@@ -2,7 +2,10 @@
 
 import tensorflow as tf
 
-from Model.utils import Params, fixed_kernel_initializer, fixed_bias_initializer
+from Model.utils import (
+    Params, fixed_kernel_initializer, fixed_bias_initializer,
+    get_confusion_matrx
+)
 
 def create_block(
     block_name, inputs, num_filters, params,
@@ -174,6 +177,7 @@ def model_fn(mode, inputs, params, reuse=False):
     tf.summary.scalar('loss', loss)
     tf.summary.scalar('accuracy', accuracy)
     tf.summary.image('train_image', inputs['images'])
+    tf.summary.tensor_summary('confusion_matrix', get_confusion_matrx(labels, tf.argmax(logits, 1)))
 
     #TODO: if mode == 'eval': ?
     # Add incorrectly labeled images
