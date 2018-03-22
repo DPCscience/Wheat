@@ -3,7 +3,6 @@ Data/*
 .ipynb_checkpoints/*
 Model/vgg_16.model_dict
 Model/__*
-*.ipynb
 *.sh
 *.pyc
 *.log
