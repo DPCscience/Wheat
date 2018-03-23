@@ -177,7 +177,7 @@ def model_fn(mode, inputs, params, reuse=False):
     tf.summary.scalar('loss', loss)
     tf.summary.scalar('accuracy', accuracy)
     tf.summary.image('train_image', inputs['images'])
-    tf.summary.tensor_summary('confusion_matrix', get_confusion_matrx(labels, tf.argmax(logits, 1)))
+
 
     #TODO: if mode == 'eval': ?
     # Add incorrectly labeled images
@@ -202,6 +202,7 @@ def model_fn(mode, inputs, params, reuse=False):
     model_spec['metrics'] = metrics
     model_spec['update_metrics'] = update_metrics_op
     model_spec['summary_op'] = tf.summary.merge_all()
+    model_spec["confusion"] = tf.summary.tensor_summary('confusion_matrix', get_confusion_matrx(labels, tf.argmax(logits, 1)))
 
     if is_training:
         model_spec['train_op'] = train_op

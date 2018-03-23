@@ -28,6 +28,7 @@ def train_sess(sess, model_spec, num_steps, writer, params):
     update_metrics = model_spec['update_metrics']
     metrics = model_spec['metrics']
     summary_op = model_spec['summary_op']
+    confusion = model_spec['confusion']
     global_step = tf.train.get_global_step()
 
     # Load the training dataset into the pipeline and initialize
@@ -41,10 +42,11 @@ def train_sess(sess, model_spec, num_steps, writer, params):
         # Evaluate summaries for tensorboard only once in a while
         if i % params.save_summary_steps == 0:
             # Perform a mini-batch update
-            _, _, loss_val, summ, global_step_val = sess.run([train_op, update_metrics, loss,
-                                                              summary_op, global_step])
+            _, _, loss_val, summ, global_step_val, c = sess.run([train_op, update_metrics, loss,
+                                                              summary_op, global_step, confusion])
             # Write summaries for tensorboard
             writer.add_summary(summ, global_step_val)
+            writer.add_summary(c)
         else:
             _, _, loss_val = sess.run([train_op, update_metrics, loss])
         # Log the loss in the tqdm progress bar
